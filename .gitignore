@@ -39,3 +39,4 @@ training/benchmark_results.png
 # Test videos in backend
 backend/test_video*.mp4
 training/Figure_1.png
+backend/models/*.pt

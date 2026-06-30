@@ -1,0 +1,11 @@
+faster-whisper
+decord
+transformers
+timm
+scikit-learn
+Pillow
+tqdm
+numpy
+fastapi
+uvicorn[standard]
+python-multipart
