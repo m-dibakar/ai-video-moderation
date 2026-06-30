@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.env
+Token.txt
+
+# Conda/venv
+venv/
+
+# Models and checkpoints (large files)
+backend/models/
+training/checkpoints/
+
+# Dataset (1.7GB — never push this)
+training/nsfw_dataset_v1/
+training/nsfw_dataset_v1.zip
+training/dataset_cache.pkl
+
+# Videos
+*.mp4 *.mkv *.avi *.mov *.webm
+
+# Node
+frontend/node_modules/
+frontend/build/
+
+# Uploads
+backend/uploads/
+
+# Benchmark output
+training/benchmark_results.png
+
+# OS
+.DS_Store
+
+# Windows Zone.Identifier files
+*.Identifier
+
+# Test videos in backend
+backend/test_video*.mp4
+training/Figure_1.png
