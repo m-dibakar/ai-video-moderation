@@ -54,11 +54,14 @@ VIDEO FILE
 
 ## Dataset
 
-**deepghs/nsfw_detect** — 28,000 labeled images across 5 classes:
-- `neutral` + `drawings` → label 0 (safe) — 11,200 images
-- `sexy` + `porn` + `hentai` → label 1 (NSFW) — 16,800 images
+**deepghs/nsfw_detect** (MIT License) — 28,000 labeled images across 5 content categories used in content moderation research. Images are grouped into two binary classes for training:
 
-We simulate realistic OTT imbalance by undersampling to 95/5 (safe/NSFW) for training.
+- **Safe (label 0)** — non-explicit content — 11,200 images  
+- **Explicit (label 1)** — policy-violating content — 16,800 images
+
+We simulate realistic OTT imbalance by undersampling to 95/5 (safe/explicit) for training, mirroring real-world video library distributions where violations are rare.
+
+> Dataset images are never displayed in this application. They are used solely as training signal for the binary classifier — the same approach used by production content moderation systems at scale.
 
 ## Loss Functions
 
