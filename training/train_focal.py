@@ -19,7 +19,7 @@ CONFIG = {
     "imbalance_ratio":  0.05,
     "total_samples":    6000,
     "val_fraction":     0.2,
-    "epochs":           5,
+    "epochs":           15,
     "batch_size":       32,
     "learning_rate":    2e-4,
     "seed":             42,

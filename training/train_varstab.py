@@ -1,10 +1,11 @@
 """
-Training Run 3: Variance-Stabilized Loss (IEEE Publication)
-Identical to train_focal.py — only criterion changes.
+Training Run 3: Variance-Stabilized Loss (IEEE Signal Processing Letters)
+Published: "Variance Stabilized Loss Function for Semantic Segmentation"
+Authors: Rinku Rabidas, Dibakar Malakar et al.
+DOI: 10.1109/LSP.2025.3625880
 """
 
 import torch
-import torch.nn as nn
 from torch.utils.data import DataLoader
 from transformers import ViTForImageClassification
 from sklearn.metrics import precision_score, recall_score, f1_score, confusion_matrix
@@ -14,10 +15,11 @@ from loss_varstab import VarianceStabilizedLoss
 
 CONFIG = {
     "loss_fn":          "VarianceStabilized",
+    "w":                0.56,
     "imbalance_ratio":  0.05,
     "total_samples":    6000,
     "val_fraction":     0.2,
-    "epochs":           5,
+    "epochs":           15,
     "batch_size":       32,
     "learning_rate":    2e-4,
     "seed":             42,
@@ -63,6 +65,7 @@ def train():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"\n{'='*55}")
     print(f"TRAINING: {CONFIG['loss_fn']} Loss (IEEE SPL)")
+    print(f"  w (β) = {CONFIG['w']}  |  α=2 (fixed)  |  γ=2 (fixed)")
     print(f"Imbalance ratio: {CONFIG['imbalance_ratio']} "
           f"({int(CONFIG['imbalance_ratio']*100)}% NSFW)")
     print(f"Device: {device}")
@@ -77,10 +80,10 @@ def train():
         seed=CONFIG["seed"]
     )
 
-    train_ds = NSFWDataset(train_samples, augment=True)
-    val_ds   = NSFWDataset(val_samples,   augment=False)
+    train_ds     = NSFWDataset(train_samples, augment=True)
+    val_ds       = NSFWDataset(val_samples,   augment=False)
     train_loader = DataLoader(train_ds, batch_size=CONFIG["batch_size"],
-                              shuffle=True, num_workers=4, pin_memory=True)
+                              shuffle=True,  num_workers=4, pin_memory=True)
     val_loader   = DataLoader(val_ds,   batch_size=CONFIG["batch_size"],
                               shuffle=False, num_workers=4, pin_memory=True)
 
@@ -100,13 +103,9 @@ def train():
         lr=CONFIG["learning_rate"], weight_decay=0.01
     )
 
-    # ── LOSS FUNCTION: Variance-Stabilized (IEEE SPL) ──────────────────────
-    criterion = VarianceStabilizedLoss(
-        eps=1e-6,
-        smooth=0.1,
-        adaptive_weighting=True
-    )
-    # ──────────────────────────────────────────────────────────────────────
+    # ── LOSS FUNCTION: Variance-Stabilized (IEEE Signal Processing Letters) ─
+    criterion = VarianceStabilizedLoss(w=CONFIG["w"], eps=1e-7)
+    # ────────────────────────────────────────────────────────────────────────
 
     os.makedirs("checkpoints", exist_ok=True)
     history = {"config": CONFIG, "epochs": []}
@@ -163,7 +162,7 @@ def train():
 
     final = history["epochs"][-1]
     print(f"\n{'='*55}")
-    print(f"FINAL RESULTS — {CONFIG['loss_fn']} (placeholder)")
+    print(f"FINAL RESULTS — {CONFIG['loss_fn']} (IEEE SPL)")
     print(f"{'='*55}")
     print(f"  Accuracy:  {final['accuracy']:.4f}")
     print(f"  Precision: {final['precision']:.4f}")
@@ -172,9 +171,8 @@ def train():
     print(f"  FPR:       {final['fpr']:.4f}")
     print(f"  TP: {final['tp']}  FP: {final['fp']}  "
           f"TN: {final['tn']}  FN: {final['fn']}")
-    print(f"\n  NOTE: Replace loss_varstab.py forward() with your")
-    print(f"  IEEE formulation and rerun to get real results.")
     print(f"\nMetrics saved to {CONFIG['metrics_path']}")
+    print(f"Model saved to   {CONFIG['checkpoint_path']}")
 
     return history
 
