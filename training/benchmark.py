@@ -137,7 +137,7 @@ def main():
         )
     summary += "─────────────────────────────────────────────\n"
     summary += "FN = violations missed (lower is better)\n"
-    summary += "* VarStab uses placeholder — replace with IEEE formula"
+    summary += "* VarStab: IEEE Signal Processing Letters, Rabidas & Malakar et al., 2025"
 
     fig.text(
         0.01, 0.01, summary,
