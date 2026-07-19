@@ -19,7 +19,7 @@ from torchvision import transforms
 
 # ── Label mapping ──────────────────────────────────────────────────────────
 SAFE_CLASSES  = ["neutral", "drawings"]    # non-explicit categories
-NSFW_CLASSES  = ["explicit_categories"]    # policy-violating categories
+NSFW_CLASSES  = ["sexy", "porn", "hentai"]    # policy-violating categories
 
 def load_all_samples(dataset_dir: str) -> tuple[list, list]:
     """
