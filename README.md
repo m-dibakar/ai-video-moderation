@@ -10,7 +10,7 @@ This project demonstrates that failure and benchmarks three loss functions that 
 
 ## Benchmark Results (50 Epochs Full Fine-tuning, 95/5 Imbalance)
 
-![Loss Function Comparison](training/benchmark_results.png)
+![Loss Function Comparison](training/benchmark_results_full.png)
 
 | Model | Best Precision | Best Recall | Best F1 | Best FN |
 |-------|---------------|-------------|---------|---------|
