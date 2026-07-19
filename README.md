@@ -8,15 +8,15 @@ Content moderation at scale has one brutal reality: violations are rare. In a ty
 
 This project demonstrates that failure and benchmarks three loss functions that progressively address it.
 
-## Benchmark Results (15 Epochs, 95/5 Imbalance)
+## Benchmark Results (50 Epochs Full Fine-tuning, 95/5 Imbalance)
 
 ![Loss Function Comparison](training/benchmark_results.png)
 
-| Model | Precision | Recall | F1 | FN (missed) | FPR |
-|-------|-----------|--------|----|-------------|-----|
-| BCE (Baseline) | 0.878 | 0.610 | 0.720 | 23 | 0.44% |
-| Focal Loss (α=0.75, γ=2) | 0.695 | 0.695 | 0.695 | 18 | 1.58% |
-| VS Loss (IEEE SPL 2025) ★ | 0.306 | **0.746** | 0.434 | **15** | 8.76% |
+| Model | Best Precision | Best Recall | Best F1 | Best FN |
+|-------|---------------|-------------|---------|---------|
+| BCE (Baseline) | 0.907 | 0.831 | 0.867 | 10 |
+| Focal Loss (α=0.75, γ=2) | 0.881 | **0.881** | **0.881** | **7** |
+| VS Loss (IEEE SPL 2025) ★ | **0.918** | 0.864 | 0.872 | 8 |
 
 ★ *"Variance Stabilized Loss Function for Semantic Segmentation", Rabidas, Malakar et al., IEEE Signal Processing Letters, 2025. DOI: 10.1109/LSP.2025.3625880*
 
