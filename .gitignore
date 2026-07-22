@@ -18,7 +18,11 @@ training/nsfw_dataset_v1.zip
 training/dataset_cache.pkl
 
 # Videos
-*.mp4 *.mkv *.avi *.mov *.webm
+*.mp4
+*.mkv
+*.avi
+*.mov
+*.webm
 
 # Node
 frontend/node_modules/
@@ -29,6 +33,19 @@ backend/uploads/
 
 # Benchmark output
 training/benchmark_results.png
+
+# Claude Code / design-planning artifacts
+.claude/
+.impeccable/
+design.md
+DESIGN.md
+product.md
+PRODUCT.md
+notes.md
+NOTES.md
+brief.md
+spec.md
+*.brief.md
 
 # OS
 .DS_Store
