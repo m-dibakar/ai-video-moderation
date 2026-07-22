@@ -8,6 +8,9 @@ Content moderation at scale has one brutal reality: violations are rare. In a ty
 
 This project demonstrates that failure and benchmarks three loss functions that progressively address it.
 
+## Demo
+▶️ [Watch demo video](https://youtu.be/SmlLumbvOc8)
+
 ## Benchmark Results (50 Epochs Full Fine-tuning, 95/5 Imbalance)
 
 ![Loss Function Comparison](training/benchmark_results_full.png)
