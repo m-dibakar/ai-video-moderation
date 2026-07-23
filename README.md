@@ -34,13 +34,13 @@ All rows use the same protocol: each run's best-F1 checkpoint, evaluated on the 
 VIDEO FILE
 │
 ▼
-[Frame Sampler]      → 1 frame per 2 seconds (decord)
+[Frame Sampler]      → 1 frame per second (browser canvas in the demo, decord in the backend)
 │
 ▼
 [ViT Classifier]     → Fine-tuned Falconsai ViT on deepghs/nsfw_detect
 │                  Trained with BCE / Focal / ASL / VS Loss (IEEE SPL)
 ▼
-[Temporal Filter]    → Violations must persist ≥3s (eliminates single-frame FPs)
+[Violation Grouping] → consecutive flagged frames merged into spans (severity + suggested action)
 │
 ▼
 [Compliance Report]  → JSON with timestamps, severity, suggested actions
@@ -112,7 +112,7 @@ python3 benchmark.py       # Generate comparison chart
 ### Backend
 ```bash
 cd backend
-cp ../training/checkpoints/model_focal.pt models/best_model.pt
+cp ../training/checkpoints/model_varstab_full.pt models/best_model.pt
 python3 main.py
 # → http://localhost:8001/docs
 ```
@@ -137,7 +137,7 @@ npm install && npm start
 | This project | Muvi TrueComply |
 |---|---|
 | ViT frame classifier | Frame-level content detector |
-| Temporal filter (≥3s) | Context-aware scene analysis |
+| Violation-span grouping | Context-aware scene analysis |
 | Compliance report JSON | CMS compliance dashboard output |
 | VS Loss (IEEE SPL) | Research contribution to moderation ML |
 | FastAPI async endpoint | Drop-in compatible API layer |

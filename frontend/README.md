@@ -1,70 +1,45 @@
-# Getting Started with Create React App
+# ClearFrame — Frontend & Live Demo
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The React app and Vercel serverless function behind
+[clearframe-tau.vercel.app](https://clearframe-tau.vercel.app) — the live demo
+for the [AI Video Content Moderation](../README.md) project.
 
-## Available Scripts
+## How it works
 
-In the project directory, you can run:
+The video you analyze **never leaves your machine**:
 
-### `npm start`
+1. **Browser frame sampling** (`src/lib/frameSampler.js`) — the video plays in
+   a hidden `<video>` element; ~1 frame per second (up to 120) is drawn onto a
+   224×224 canvas and exported as a small JPEG (~15–30 KB each).
+2. **Serverless scoring** (`api/moderate.js`) — frames are POSTed in batches
+   of 16 (3 in flight) to a Vercel function that runs the int8-quantized ONNX
+   export of the VS Loss fine-tuned ViT (`api/_model/`, 87 MB) via
+   `onnxruntime-node`, with `sharp` mirroring the training preprocessing
+   (224×224 squash + ImageNet normalization).
+3. **Report assembly** (`src/lib/moderateClient.js`) — consecutive flagged
+   frames are grouped into violation spans with severity and suggested
+   actions, rendered by the timeline and report panel.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Structure
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```
+api/moderate.js        serverless scoring endpoint (POST /api/moderate)
+api/_model/            int8 ONNX model bundled into the function (vercel.json)
+src/App.js             page + analyzer state machine
+src/lib/               frame sampler + moderation client
+src/components/        UploadZone, Pipeline, StageStepper, FilmStrip,
+                       Timeline, ReportPanel, Benchmarks
+src/index.css          OKLCH design tokens (single source of visual truth)
+```
 
-### `npm test`
+## Develop
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+npm install
+npm start          # CRA dev server — UI only, /api routes are NOT served
+npx vercel dev     # UI + the serverless function (use this to test analysis)
+npm run build      # production build
+```
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Deploy: `npx vercel --prod` (function config — 60 s max duration, bundled
+model — lives in `vercel.json`).

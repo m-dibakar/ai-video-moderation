@@ -64,7 +64,7 @@ export default function FilmStrip() {
         <div className="fs-scanline" aria-hidden="true" />
       </div>
       <figcaption className="fs-caption">
-        Model inference, illustrative — 1 frame sampled every 2 s, each scored by the fine-tuned ViT
+        Model inference, illustrative — frames sampled across the video, each scored by the fine-tuned ViT
       </figcaption>
     </figure>
   );

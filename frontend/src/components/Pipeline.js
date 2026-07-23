@@ -5,20 +5,20 @@ const STAGES = [
   {
     n: '1',
     title: 'Frame sampler',
-    body: 'decord pulls one frame every 2 seconds — enough temporal resolution to catch any violation lasting 3 s or more.',
-    tag: 'decord',
+    body: 'Your browser samples one frame per second (up to 120) straight onto a 224 px canvas — the video itself never leaves your machine.',
+    tag: '1 fps · in-browser',
   },
   {
     n: '2',
     title: 'ViT classifier',
-    body: 'A fine-tuned Falconsai vision transformer scores every sampled frame as safe or explicit.',
-    tag: 'ViT-B/16',
+    body: 'A fine-tuned Falconsai vision transformer — served as an int8 ONNX model in a serverless function — scores every sampled frame as safe or explicit.',
+    tag: 'ViT-B/16 · int8',
   },
   {
     n: '3',
-    title: 'Temporal filter',
-    body: 'Detections must persist for at least 3 seconds. Single-frame false positives die here.',
-    tag: '≥ 3 s',
+    title: 'Violation grouping',
+    body: 'Consecutive flagged frames merge into violation spans, each graded high / medium / low by average confidence.',
+    tag: 'spans',
   },
   {
     n: '4',

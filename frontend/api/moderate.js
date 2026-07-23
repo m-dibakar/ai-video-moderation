@@ -1,5 +1,5 @@
 // Vercel serverless function: scores a batch of video frames with the
-// int8 ONNX export of the BCE full-finetune checkpoint (sweep winner).
+// int8 ONNX export of the VS Loss full-finetune checkpoint (IEEE SPL 2025).
 //
 // POST /api/moderate
 //   { "frames": [{ "timestamp": 1.5, "jpegBase64": "..." }, ...] }

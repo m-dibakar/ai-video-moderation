@@ -92,7 +92,7 @@ export default function ReportPanel({ report, currentTime, onSeek, videoName }) 
       ) : (
         <div className="v-empty">
           <p>Every sampled frame classified safe.</p>
-          <p>Nothing persisted past the 3-second temporal filter.</p>
+          <p>No frame crossed the moderation threshold.</p>
         </div>
       )}
 

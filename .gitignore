@@ -57,3 +57,5 @@ spec.md
 backend/test_video*.mp4
 training/Figure_1.png
 backend/models/*.pt
+
+PROJECT_REFERENCE.md
