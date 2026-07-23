@@ -1,0 +1,94 @@
+=======================================================
+TRAINING: VarianceStabilized_StratifiedBatches
+Stratified batches: 2 positives / batch of 16
+Device: cuda
+=======================================================
+
+Found 11200 safe images
+Found 16800 NSFW images
+
+=======================================================
+DATASET SPLIT (imbalance_ratio=0.05)
+  Train: 4559 safe + 241 NSFW = 4800 total
+  Val:   1141 safe + 59 NSFW = 1200 total
+  Train positive rate: 5.0%
+=======================================================
+Loading Falconsai model...
+[transformers] You passed `num_labels=1` which is incompatible to the `id2label` map of length `2`.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████| 200/200 [00:00<00:00, 2371.08it/s]
+[transformers] ViTForImageClassification LOAD REPORT from: Falconsai/nsfw_image_detection
+Key               | Status   |                                                                                       
+------------------+----------+---------------------------------------------------------------------------------------
+classifier.bias   | MISMATCH | Reinit due to size mismatch - ckpt: torch.Size([2]) vs model:torch.Size([1])          
+classifier.weight | MISMATCH | Reinit due to size mismatch - ckpt: torch.Size([2, 768]) vs model:torch.Size([1, 768])
+
+Notes:
+- MISMATCH:     ckpt weights were loaded, but they did not match the original empty weight shapes.
+Epoch 01/50 | Loss: 0.4208 | P: 0.681 | R: 0.831 | F1: 0.748 | FN: 10 | Time: 109s
+  ✓ Best saved (F1=0.748)
+Epoch 02/50 | Loss: 0.1092 | P: 0.790 | R: 0.831 | F1: 0.810 | FN: 10 | Time: 112s
+  ✓ Best saved (F1=0.810)
+Epoch 03/50 | Loss: 0.0790 | P: 0.810 | R: 0.797 | F1: 0.803 | FN: 12 | Time: 115s
+Epoch 04/50 | Loss: 0.0631 | P: 0.762 | R: 0.814 | F1: 0.787 | FN: 11 | Time: 116s
+Epoch 05/50 | Loss: 0.0665 | P: 0.855 | R: 0.797 | F1: 0.825 | FN: 12 | Time: 117s
+  ✓ Best saved (F1=0.825)
+Epoch 06/50 | Loss: 0.0695 | P: 0.885 | R: 0.780 | F1: 0.829 | FN: 13 | Time: 117s
+  ✓ Best saved (F1=0.829)
+Epoch 07/50 | Loss: 0.0698 | P: 0.936 | R: 0.746 | F1: 0.830 | FN: 15 | Time: 116s
+  ✓ Best saved (F1=0.830)
+Epoch 08/50 | Loss: 0.0741 | P: 0.823 | R: 0.864 | F1: 0.843 | FN: 8 | Time: 116s
+  ✓ Best saved (F1=0.843)
+Epoch 09/50 | Loss: 0.0661 | P: 0.809 | R: 0.864 | F1: 0.836 | FN: 8 | Time: 117s
+Epoch 10/50 | Loss: 0.0719 | P: 0.885 | R: 0.780 | F1: 0.829 | FN: 13 | Time: 116s
+Epoch 11/50 | Loss: 0.0669 | P: 0.845 | R: 0.831 | F1: 0.838 | FN: 10 | Time: 116s
+Epoch 12/50 | Loss: 0.0636 | P: 0.864 | R: 0.864 | F1: 0.864 | FN: 8 | Time: 115s
+  ✓ Best saved (F1=0.864)
+Epoch 13/50 | Loss: 0.0618 | P: 0.917 | R: 0.746 | F1: 0.822 | FN: 15 | Time: 115s
+Epoch 14/50 | Loss: 0.0579 | P: 0.845 | R: 0.831 | F1: 0.838 | FN: 10 | Time: 115s
+Epoch 15/50 | Loss: 0.0763 | P: 0.893 | R: 0.848 | F1: 0.870 | FN: 9 | Time: 115s
+  ✓ Best saved (F1=0.870)
+Epoch 16/50 | Loss: 0.0732 | P: 0.800 | R: 0.881 | F1: 0.839 | FN: 7 | Time: 115s
+Epoch 17/50 | Loss: 0.0727 | P: 0.918 | R: 0.763 | F1: 0.833 | FN: 14 | Time: 115s
+Epoch 18/50 | Loss: 0.0584 | P: 0.918 | R: 0.763 | F1: 0.833 | FN: 14 | Time: 115s
+Epoch 19/50 | Loss: 0.0618 | P: 0.823 | R: 0.864 | F1: 0.843 | FN: 8 | Time: 115s
+Epoch 20/50 | Loss: 0.0621 | P: 0.909 | R: 0.678 | F1: 0.777 | FN: 19 | Time: 115s
+Epoch 21/50 | Loss: 0.0683 | P: 0.868 | R: 0.780 | F1: 0.821 | FN: 13 | Time: 115s
+Epoch 22/50 | Loss: 0.0597 | P: 0.868 | R: 0.780 | F1: 0.821 | FN: 13 | Time: 115s
+Epoch 23/50 | Loss: 0.0684 | P: 0.900 | R: 0.763 | F1: 0.826 | FN: 14 | Time: 115s
+Epoch 24/50 | Loss: 0.0561 | P: 0.882 | R: 0.763 | F1: 0.818 | FN: 14 | Time: 115s
+Epoch 25/50 | Loss: 0.0649 | P: 0.887 | R: 0.797 | F1: 0.839 | FN: 12 | Time: 115s
+Epoch 26/50 | Loss: 0.0613 | P: 0.887 | R: 0.797 | F1: 0.839 | FN: 12 | Time: 115s
+Epoch 27/50 | Loss: 0.0515 | P: 0.885 | R: 0.780 | F1: 0.829 | FN: 13 | Time: 115s
+Epoch 28/50 | Loss: 0.0613 | P: 0.885 | R: 0.780 | F1: 0.829 | FN: 13 | Time: 115s
+Epoch 29/50 | Loss: 0.0545 | P: 0.887 | R: 0.797 | F1: 0.839 | FN: 12 | Time: 115s
+Epoch 30/50 | Loss: 0.0583 | P: 0.885 | R: 0.780 | F1: 0.829 | FN: 13 | Time: 115s
+Epoch 31/50 | Loss: 0.0606 | P: 0.918 | R: 0.763 | F1: 0.833 | FN: 14 | Time: 115s
+Epoch 32/50 | Loss: 0.0628 | P: 0.918 | R: 0.763 | F1: 0.833 | FN: 14 | Time: 115s
+Epoch 33/50 | Loss: 0.0581 | P: 0.918 | R: 0.763 | F1: 0.833 | FN: 14 | Time: 115s
+Epoch 34/50 | Loss: 0.0530 | P: 0.918 | R: 0.763 | F1: 0.833 | FN: 14 | Time: 115s
+Epoch 35/50 | Loss: 0.0583 | P: 0.882 | R: 0.763 | F1: 0.818 | FN: 14 | Time: 115s
+Epoch 36/50 | Loss: 0.0560 | P: 0.882 | R: 0.763 | F1: 0.818 | FN: 14 | Time: 115s
+Epoch 37/50 | Loss: 0.0537 | P: 0.882 | R: 0.763 | F1: 0.818 | FN: 14 | Time: 115s
+Epoch 38/50 | Loss: 0.0560 | P: 0.882 | R: 0.763 | F1: 0.818 | FN: 14 | Time: 115s
+Epoch 39/50 | Loss: 0.0583 | P: 0.882 | R: 0.763 | F1: 0.818 | FN: 14 | Time: 115s
+Epoch 40/50 | Loss: 0.0604 | P: 0.882 | R: 0.763 | F1: 0.818 | FN: 14 | Time: 115s
+Epoch 41/50 | Loss: 0.0583 | P: 0.900 | R: 0.763 | F1: 0.826 | FN: 14 | Time: 115s
+Epoch 42/50 | Loss: 0.0581 | P: 0.900 | R: 0.763 | F1: 0.826 | FN: 14 | Time: 115s
+Epoch 43/50 | Loss: 0.0568 | P: 0.900 | R: 0.763 | F1: 0.826 | FN: 14 | Time: 115s
+Epoch 44/50 | Loss: 0.0558 | P: 0.900 | R: 0.763 | F1: 0.826 | FN: 14 | Time: 115s
+Epoch 45/50 | Loss: 0.0583 | P: 0.902 | R: 0.780 | F1: 0.836 | FN: 13 | Time: 115s
+Epoch 46/50 | Loss: 0.0608 | P: 0.900 | R: 0.763 | F1: 0.826 | FN: 14 | Time: 115s
+Epoch 47/50 | Loss: 0.0604 | P: 0.900 | R: 0.763 | F1: 0.826 | FN: 14 | Time: 115s
+Epoch 48/50 | Loss: 0.0545 | P: 0.900 | R: 0.763 | F1: 0.826 | FN: 14 | Time: 115s
+Epoch 49/50 | Loss: 0.0583 | P: 0.900 | R: 0.763 | F1: 0.826 | FN: 14 | Time: 115s
+Epoch 50/50 | Loss: 0.0605 | P: 0.900 | R: 0.763 | F1: 0.826 | FN: 14 | Time: 115s
+
+=======================================================
+FINAL — VarianceStabilized_StratifiedBatches
+=======================================================
+  Precision: 0.9000
+  Recall:    0.7627
+  F1:        0.8257
+  FN:        14
+  Best F1:   0.8696

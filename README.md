@@ -1,29 +1,34 @@
 # AI Video Content Moderation with Custom Loss Functions
 
-> A research-to-production project benchmarking BCE, Focal Loss, and a custom IEEE-published Variance-Stabilized loss function for NSFW content detection on imbalanced video data — built to address the core ML problem in Muvi's TrueComply pipeline.
+> A research-to-production project benchmarking BCE, Focal Loss, Asymmetric Loss, and a custom IEEE-published Variance-Stabilized loss function for NSFW content detection on imbalanced video data — built to address the core ML problem in Muvi's TrueComply pipeline.
 
 ## The Problem
 
 Content moderation at scale has one brutal reality: violations are rare. In a typical OTT video library, ~95-98% of frames are safe. A model trained with standard BCE loss learns a lazy shortcut — predict "safe" for everything, achieve 98% accuracy, catch zero violations.
 
-This project demonstrates that failure and benchmarks three loss functions that progressively address it.
+This project demonstrates that failure and benchmarks four loss functions that progressively address it.
 
 ## Demo
+🌐 **[Live demo — clearframe-tau.vercel.app](https://clearframe-tau.vercel.app)** · frames are sampled in your browser and scored by the VS Loss checkpoint (int8 ONNX) in a serverless function; the video never leaves your machine.
+
 ▶️ [Watch demo video](https://youtu.be/SmlLumbvOc8)
 
 ## Benchmark Results (50 Epochs Full Fine-tuning, 95/5 Imbalance)
 
 ![Loss Function Comparison](training/benchmark_results_full.png)
 
-| Model | Best Precision | Best Recall | Best F1 | Best FN |
-|-------|---------------|-------------|---------|---------|
-| BCE (Baseline) | 0.907 | 0.831 | 0.867 | 10 |
+All rows use the same protocol: each run's best-F1 checkpoint, evaluated on the shared seed-42 validation split (1141 safe / 59 NSFW). These are the same checkpoints the live demo deploys.
+
+| Model | Precision | Recall | F1 | FN |
+|-------|-----------|--------|----|----|
+| BCE (Baseline) | **0.907** | 0.831 | 0.867 | 10 |
 | Focal Loss (α=0.75, γ=2) | 0.881 | **0.881** | **0.881** | **7** |
-| VS Loss (IEEE SPL 2025) ★ | **0.918** | 0.864 | 0.872 | 8 |
+| ASL (γ+=0, γ−=4, m=0.05) | 0.793 | 0.780 | 0.786 | 13 |
+| VS Loss (IEEE SPL 2025) ★ | 0.879 | 0.864 | 0.872 | 8 |
 
 ★ *"Variance Stabilized Loss Function for Semantic Segmentation", Rabidas, Malakar et al., IEEE Signal Processing Letters, 2025. DOI: 10.1109/LSP.2025.3625880*
 
-**Key finding:** The VS Loss achieves the highest recall (74.6%) and fewest missed violations (FN=15) — catching 35% more violations than BCE. The precision-recall tradeoff reflects that a sensitivity-maximizing loss designed for medical segmentation (where false negatives are catastrophic) behaves differently in content moderation (where false positives have direct business cost). This domain transfer insight is the research contribution.
+**Key finding:** Against the BCE baseline, VS Loss cuts missed violations from 10 to 8 while giving up under 3 points of precision — the recall advantage the loss was designed for in medical segmentation (where false negatives are catastrophic) transfers intact to content moderation's 95:5 imbalance. That domain transfer is the research contribution. ASL, by contrast, collapsed to 0.79 precision despite its aggressive negative down-weighting, showing that asymmetric focusing alone doesn't survive the noisy negative tail. The VS checkpoint is the one deployed in the live demo.
 
 ## What It Does
 VIDEO FILE
@@ -33,7 +38,7 @@ VIDEO FILE
 │
 ▼
 [ViT Classifier]     → Fine-tuned Falconsai ViT on deepghs/nsfw_detect
-│                  Trained with BCE / Focal / VS Loss (IEEE SPL)
+│                  Trained with BCE / Focal / ASL / VS Loss (IEEE SPL)
 ▼
 [Temporal Filter]    → Violations must persist ≥3s (eliminates single-frame FPs)
 │
@@ -48,7 +53,7 @@ VIDEO FILE
 | Layer | Tools |
 |-------|-------|
 | Vision Model | ViT (Falconsai/nsfw_image_detection backbone) |
-| Loss Functions | BCE, Focal Loss, VS Loss (IEEE Signal Processing Letters 2025) |
+| Loss Functions | BCE, Focal Loss, ASL, VS Loss (IEEE Signal Processing Letters 2025) |
 | Dataset | deepghs/nsfw_detect (28k images, MIT license) |
 | Training | PyTorch, HuggingFace Transformers |
 | Metrics | scikit-learn (precision, recall, F1, confusion matrix) |

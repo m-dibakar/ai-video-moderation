@@ -1,0 +1,99 @@
+
+=======================================================
+TRAINING: ASL_FullFinetune
+γ+=0.0, γ-=4.0, m=0.05, prior=0.05
+Device: cuda
+=======================================================
+
+Found 11200 safe images
+Found 16800 NSFW images
+
+=======================================================
+DATASET SPLIT (imbalance_ratio=0.05)
+  Train: 4559 safe + 241 NSFW = 4800 total
+  Val:   1141 safe + 59 NSFW = 1200 total
+  Train positive rate: 5.0%
+=======================================================
+Loading Falconsai model...
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] You passed `num_labels=1` which is incompatible to the `id2label` map of length `2`.
+Loading weights:   0%|          | 0/200 [00:00<?, ?it/s]Loading weights: 100%|██████████| 200/200 [00:00<00:00, 2332.44it/s]
+[transformers] [1mViTForImageClassification LOAD REPORT[0m from: Falconsai/nsfw_image_detection
+Key               | Status   |                                                                                       
+------------------+----------+---------------------------------------------------------------------------------------
+classifier.bias   | MISMATCH | Reinit due to size mismatch - ckpt: torch.Size([2]) vs model:torch.Size([1])          
+classifier.weight | MISMATCH | Reinit due to size mismatch - ckpt: torch.Size([2, 768]) vs model:torch.Size([1, 768])
+
+Notes:
+- MISMATCH:	ckpt weights were loaded, but they did not match the original empty weight shapes.
+Epoch 01/50 | Loss: 0.0743 | P: 0.049 | R: 1.000 | F1: 0.094 | FN: 0 | Time: 99s
+  ✓ Best saved (F1=0.094)
+Epoch 02/50 | Loss: 0.0307 | P: 0.049 | R: 1.000 | F1: 0.094 | FN: 0 | Time: 99s
+Epoch 03/50 | Loss: 0.0183 | P: 0.049 | R: 1.000 | F1: 0.094 | FN: 0 | Time: 104s
+Epoch 04/50 | Loss: 0.0102 | P: 0.049 | R: 1.000 | F1: 0.094 | FN: 0 | Time: 105s
+Epoch 05/50 | Loss: 0.0058 | P: 0.050 | R: 1.000 | F1: 0.095 | FN: 0 | Time: 106s
+  ✓ Best saved (F1=0.095)
+Epoch 06/50 | Loss: 0.0033 | P: 0.059 | R: 1.000 | F1: 0.111 | FN: 0 | Time: 106s
+  ✓ Best saved (F1=0.111)
+Epoch 07/50 | Loss: 0.0022 | P: 0.076 | R: 1.000 | F1: 0.141 | FN: 0 | Time: 105s
+  ✓ Best saved (F1=0.141)
+Epoch 08/50 | Loss: 0.0010 | P: 0.102 | R: 1.000 | F1: 0.185 | FN: 0 | Time: 106s
+  ✓ Best saved (F1=0.185)
+Epoch 09/50 | Loss: 0.0008 | P: 0.182 | R: 0.966 | F1: 0.306 | FN: 2 | Time: 104s
+  ✓ Best saved (F1=0.306)
+Epoch 10/50 | Loss: 0.0005 | P: 0.163 | R: 0.983 | F1: 0.279 | FN: 1 | Time: 104s
+Epoch 11/50 | Loss: 0.0011 | P: 0.224 | R: 0.966 | F1: 0.364 | FN: 2 | Time: 104s
+  ✓ Best saved (F1=0.364)
+Epoch 12/50 | Loss: 0.0005 | P: 0.285 | R: 0.966 | F1: 0.440 | FN: 2 | Time: 103s
+  ✓ Best saved (F1=0.440)
+Epoch 13/50 | Loss: 0.0003 | P: 0.245 | R: 0.966 | F1: 0.390 | FN: 2 | Time: 104s
+Epoch 14/50 | Loss: 0.0022 | P: 0.605 | R: 0.881 | F1: 0.717 | FN: 7 | Time: 104s
+  ✓ Best saved (F1=0.717)
+Epoch 15/50 | Loss: 0.0011 | P: 0.289 | R: 0.983 | F1: 0.446 | FN: 1 | Time: 103s
+Epoch 16/50 | Loss: 0.0007 | P: 0.419 | R: 0.966 | F1: 0.585 | FN: 2 | Time: 103s
+Epoch 17/50 | Loss: 0.0005 | P: 0.386 | R: 0.949 | F1: 0.549 | FN: 3 | Time: 103s
+Epoch 18/50 | Loss: 0.0006 | P: 0.357 | R: 0.949 | F1: 0.518 | FN: 3 | Time: 103s
+Epoch 19/50 | Loss: 0.0018 | P: 0.280 | R: 0.949 | F1: 0.432 | FN: 3 | Time: 103s
+Epoch 20/50 | Loss: 0.0001 | P: 0.571 | R: 0.881 | F1: 0.693 | FN: 7 | Time: 103s
+Epoch 21/50 | Loss: 0.0003 | P: 0.557 | R: 0.915 | F1: 0.692 | FN: 5 | Time: 103s
+Epoch 22/50 | Loss: 0.0009 | P: 0.600 | R: 0.915 | F1: 0.725 | FN: 5 | Time: 103s
+  ✓ Best saved (F1=0.725)
+Epoch 23/50 | Loss: 0.0001 | P: 0.535 | R: 0.898 | F1: 0.671 | FN: 6 | Time: 103s
+Epoch 24/50 | Loss: 0.0000 | P: 0.455 | R: 0.932 | F1: 0.611 | FN: 4 | Time: 103s
+Epoch 25/50 | Loss: 0.0004 | P: 0.455 | R: 0.949 | F1: 0.615 | FN: 3 | Time: 104s
+Epoch 26/50 | Loss: 0.0000 | P: 0.518 | R: 0.949 | F1: 0.671 | FN: 3 | Time: 103s
+Epoch 27/50 | Loss: 0.0002 | P: 0.545 | R: 0.915 | F1: 0.683 | FN: 5 | Time: 103s
+Epoch 28/50 | Loss: 0.0005 | P: 0.667 | R: 0.915 | F1: 0.771 | FN: 5 | Time: 103s
+  ✓ Best saved (F1=0.771)
+Epoch 29/50 | Loss: 0.0002 | P: 0.587 | R: 0.915 | F1: 0.715 | FN: 5 | Time: 103s
+Epoch 30/50 | Loss: 0.0000 | P: 0.611 | R: 0.932 | F1: 0.738 | FN: 4 | Time: 103s
+Epoch 31/50 | Loss: 0.0005 | P: 0.662 | R: 0.898 | F1: 0.763 | FN: 6 | Time: 103s
+Epoch 32/50 | Loss: 0.0000 | P: 0.654 | R: 0.898 | F1: 0.757 | FN: 6 | Time: 103s
+Epoch 33/50 | Loss: 0.0000 | P: 0.793 | R: 0.780 | F1: 0.786 | FN: 13 | Time: 103s
+  ✓ Best saved (F1=0.786)
+Epoch 34/50 | Loss: 0.0004 | P: 0.654 | R: 0.898 | F1: 0.757 | FN: 6 | Time: 103s
+Epoch 35/50 | Loss: 0.0000 | P: 0.625 | R: 0.932 | F1: 0.748 | FN: 4 | Time: 103s
+Epoch 36/50 | Loss: 0.0000 | P: 0.609 | R: 0.949 | F1: 0.742 | FN: 3 | Time: 103s
+Epoch 37/50 | Loss: 0.0000 | P: 0.583 | R: 0.949 | F1: 0.723 | FN: 3 | Time: 103s
+Epoch 38/50 | Loss: 0.0000 | P: 0.596 | R: 0.949 | F1: 0.732 | FN: 3 | Time: 103s
+Epoch 39/50 | Loss: 0.0004 | P: 0.704 | R: 0.848 | F1: 0.769 | FN: 9 | Time: 103s
+Epoch 40/50 | Loss: 0.0000 | P: 0.650 | R: 0.881 | F1: 0.748 | FN: 7 | Time: 103s
+Epoch 41/50 | Loss: 0.0000 | P: 0.708 | R: 0.864 | F1: 0.779 | FN: 8 | Time: 102s
+Epoch 42/50 | Loss: 0.0000 | P: 0.699 | R: 0.864 | F1: 0.773 | FN: 8 | Time: 102s
+Epoch 43/50 | Loss: 0.0000 | P: 0.675 | R: 0.881 | F1: 0.765 | FN: 7 | Time: 101s
+Epoch 44/50 | Loss: 0.0000 | P: 0.675 | R: 0.881 | F1: 0.765 | FN: 7 | Time: 101s
+Epoch 45/50 | Loss: 0.0000 | P: 0.658 | R: 0.915 | F1: 0.766 | FN: 5 | Time: 101s
+Epoch 46/50 | Loss: 0.0004 | P: 0.618 | R: 0.932 | F1: 0.743 | FN: 4 | Time: 101s
+Epoch 47/50 | Loss: 0.0000 | P: 0.675 | R: 0.915 | F1: 0.777 | FN: 5 | Time: 101s
+Epoch 48/50 | Loss: 0.0000 | P: 0.675 | R: 0.915 | F1: 0.777 | FN: 5 | Time: 101s
+Epoch 49/50 | Loss: 0.0000 | P: 0.671 | R: 0.898 | F1: 0.768 | FN: 6 | Time: 101s
+Epoch 50/50 | Loss: 0.0000 | P: 0.671 | R: 0.898 | F1: 0.768 | FN: 6 | Time: 101s
+
+=======================================================
+FINAL — ASL_FullFinetune
+=======================================================
+  Precision: 0.6709
+  Recall:    0.8983
+  F1:        0.7681
+  FN:        6
+  Best F1:   0.7863
