@@ -1,6 +1,6 @@
 import React from 'react';
 
-const STAGES = ['Upload', 'Sample frames', 'Classify', 'Report'];
+const STAGES = ['Select', 'Sample frames', 'Classify', 'Report'];
 
 /**
  * activeIndex: index of the stage currently running (stages before it are done).

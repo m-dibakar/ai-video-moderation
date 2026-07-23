@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { uploadVideo, pollJob } from './api';
+import React, { useState, useRef, useCallback } from 'react';
+import { moderateVideo } from './lib/moderateClient';
 import FilmStrip from './components/FilmStrip';
 import Benchmarks from './components/Benchmarks';
 import Pipeline from './components/Pipeline';
@@ -25,8 +25,7 @@ function App() {
   const videoRef = useRef(null);
   const [videoFile, setVideoFile] = useState(null);
   const [videoURL, setVideoURL] = useState(null);
-  const [jobId, setJobId] = useState(null);
-  const [status, setStatus] = useState('idle'); // idle | uploading | processing | done | error
+  const [status, setStatus] = useState('idle'); // idle | processing | done | error
   const [jobStage, setJobStage] = useState(null); // sampling_frames | classifying
   const [errorMsg, setErrorMsg] = useState('');
   const [report, setReport] = useState(null);
@@ -41,54 +40,31 @@ function App() {
     setJobStage(null);
     setErrorMsg('');
     setReport(null);
-    setJobId(null);
     setDuration(0);
     setCurrentTime(0);
   };
 
-  const handleUpload = async () => {
+  const handleAnalyze = async () => {
     if (!videoFile) return;
     try {
-      setStatus('uploading');
-      setErrorMsg('');
-      const { job_id } = await uploadVideo(videoFile);
-      setJobId(job_id);
       setStatus('processing');
       setJobStage('sampling_frames');
+      setErrorMsg('');
+      const result = await moderateVideo(videoFile, {
+        onProgress: ({ phase }) =>
+          setJobStage(phase === 'scoring' ? 'classifying' : 'sampling_frames'),
+      });
+      setReport(result);
+      setStatus('done');
     } catch (err) {
       setStatus('error');
       setErrorMsg(
-        err.message === 'Network Error'
-          ? 'Could not reach the inference API. Is the FastAPI backend running on localhost:8001?'
-          : `Upload failed: ${err.message}`
+        /failed to fetch|networkerror/i.test(err.message)
+          ? 'Could not reach /api/moderate. In local dev, run "npx vercel dev" — the CRA dev server does not serve API routes.'
+          : `Analysis failed: ${err.message}`
       );
     }
   };
-
-  useEffect(() => {
-    if (status !== 'processing' || !jobId) return;
-    const interval = setInterval(async () => {
-      try {
-        const job = await pollJob(jobId);
-        if (job.status === 'sampling_frames' || job.status === 'classifying') {
-          setJobStage(job.status);
-        } else if (job.status === 'completed') {
-          clearInterval(interval);
-          setReport(job.report);
-          setStatus('done');
-        } else if (job.status === 'failed') {
-          clearInterval(interval);
-          setStatus('error');
-          setErrorMsg(`Analysis failed: ${job.error}`);
-        }
-      } catch (err) {
-        clearInterval(interval);
-        setStatus('error');
-        setErrorMsg(`Lost contact with the inference API: ${err.message}`);
-      }
-    }, 3000);
-    return () => clearInterval(interval);
-  }, [status, jobId]);
 
   const seekTo = useCallback((seconds) => {
     if (videoRef.current) {
@@ -97,10 +73,9 @@ function App() {
     }
   }, []);
 
-  const isProcessing = status === 'uploading' || status === 'processing';
+  const isProcessing = status === 'processing';
   const stepperIndex =
-    status === 'uploading' ? 0
-    : status === 'processing' ? (jobStage === 'classifying' ? 2 : 1)
+    status === 'processing' ? (jobStage === 'classifying' ? 2 : 1)
     : status === 'done' ? 4
     : 0;
 
@@ -132,12 +107,12 @@ function App() {
             <a href="#benchmarks" className="btn btn-ghost">See the benchmarks</a>
           </div>
           <FilmStrip />
-          <p className="hero-specs">ViT-B/16 · deepghs/nsfw_detect · BCE / Focal / VS Loss (IEEE SPL 2025)</p>
+          <p className="hero-specs">ViT-B/16 · deepghs/nsfw_detect · BCE / Focal / ASL / VS Loss (IEEE SPL 2025)</p>
         </header>
 
         {/* ---------- Benchmarks ---------- */}
         <section id="benchmarks" className="section">
-          <h2>Three loss functions.<br />One brutal imbalance.</h2>
+          <h2>Four loss functions.<br />One brutal imbalance.</h2>
           <p className="section-lede">
             When 95% of frames are safe, BCE learns the lazy shortcut: predict &ldquo;safe&rdquo; everywhere and
             score 98% accuracy while catching nothing. These are the real numbers from a 50-epoch full
@@ -160,8 +135,9 @@ function App() {
         <section id="analyze" className="section">
           <h2>Run it yourself.</h2>
           <p className="section-lede">
-            Upload any video and the pipeline returns a frame-level compliance report with a clickable
-            violation timeline. Requires the FastAPI backend on <code>localhost:8001</code>.
+            Pick any video and the pipeline returns a frame-level compliance report with a clickable
+            violation timeline. Frames are sampled in your browser and scored serverlessly — the video
+            itself never leaves your machine.
           </p>
 
           <div className="analyzer">
@@ -170,7 +146,7 @@ function App() {
               <div className="analyzer-cta">
                 <button
                   className="btn btn-primary btn-wide"
-                  onClick={handleUpload}
+                  onClick={handleAnalyze}
                   disabled={!videoFile || isProcessing}
                 >
                   {isProcessing ? 'Analyzing…' : 'Run analysis'}
@@ -230,8 +206,8 @@ function App() {
         <div className="footer-inner">
         <Wordmark />
         <p>
-          A research-to-production benchmark of BCE, Focal, and Variance-Stabilized loss for NSFW detection
-          on imbalanced video data. VS Loss: Rabidas, Malakar et&nbsp;al., IEEE Signal Processing Letters, 2025 —{' '}
+          A research-to-production benchmark of BCE, Focal, Asymmetric, and Variance-Stabilized loss for
+          NSFW detection on imbalanced video data. VS Loss: Rabidas, Malakar et&nbsp;al., IEEE Signal Processing Letters, 2025 —{' '}
           <a href="https://doi.org/10.1109/LSP.2025.3625880" target="_blank" rel="noreferrer">
             DOI&nbsp;10.1109/LSP.2025.3625880
           </a>

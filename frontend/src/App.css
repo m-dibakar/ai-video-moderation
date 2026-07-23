@@ -359,6 +359,16 @@ code {
   flex-wrap: wrap;
 }
 .bench-star { color: var(--primary); font-size: 13px; }
+
+.bench-live-tag {
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: var(--primary-deep);
+  border: 1px solid var(--primary);
+  border-radius: 999px;
+  padding: 1px 7px;
+  white-space: nowrap;
+}
 .bench-detail {
   font-family: var(--font-mono);
   font-size: 11px;
