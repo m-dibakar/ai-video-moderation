@@ -7,12 +7,14 @@ import os
 MODELS = {
     "BCE (Baseline)":            "checkpoints/metrics_bce_full.json",
     "Focal Loss (α=0.75, γ=2)": "checkpoints/metrics_focal_full.json",
+    "ASL (γ+=0, γ−=4, m=0.05)": "checkpoints/metrics_asl_full.json",
     "VS Loss (IEEE SPL)":        "checkpoints/metrics_varstab_full.json",
 }
 
 COLORS = {
     "BCE (Baseline)":            "#ef4444",
     "Focal Loss (α=0.75, γ=2)": "#f97316",
+    "ASL (γ+=0, γ−=4, m=0.05)": "#38bdf8",
     "VS Loss (IEEE SPL)":        "#22c55e",
 }
 
@@ -86,18 +88,22 @@ def main():
     # Final bar chart
     ax          = axes["bar"]
     model_names = list(all_metrics.keys())
-    short_names = ["BCE", "Focal", "VS Loss\n(IEEE SPL)"]
-    best_f1     = [max(e["f1"]        for e in all_metrics[m]) for m in model_names]
-    best_recall = [max(e["recall"]    for e in all_metrics[m]) for m in model_names]
-    min_fn      = [min(e["fn"]        for e in all_metrics[m]) for m in model_names]
-    best_prec   = [max(e["precision"] for e in all_metrics[m]) for m in model_names]
+    short_names = ["BCE", "Focal", "ASL", "VS Loss\n(IEEE SPL)"]
+    # Best-F1 epoch per run (the saved checkpoint), NOT per-metric maxima —
+    # ASL's degenerate early epochs (recall 1.0 at precision 0.05) would
+    # otherwise cherry-pick Recall=1.0 / FN=0 bars that no checkpoint achieves.
+    best_eps    = [max(all_metrics[m], key=lambda e: e["f1"]) for m in model_names]
+    best_f1     = [e["f1"]        for e in best_eps]
+    best_recall = [e["recall"]    for e in best_eps]
+    min_fn      = [e["fn"]        for e in best_eps]
+    best_prec   = [e["precision"] for e in best_eps]
 
     x = np.arange(len(model_names))
     w = 0.22
     ax.bar(x - w,   best_prec,   w, label="Precision", color="#3b82f6", alpha=0.9)
     ax.bar(x,       best_recall, w, label="Recall",    color="#8b5cf6", alpha=0.9)
     ax.bar(x + w,   best_f1,     w, label="F1",        color="#22c55e", alpha=0.9)
-    ax.set_title("Best Metrics (50 epochs)", fontsize=10, pad=8)
+    ax.set_title("Best-F1 Checkpoint Metrics (50 epochs)", fontsize=10, pad=8)
     ax.set_xticks(x)
     ax.set_xticklabels(short_names, fontsize=9)
     ax.set_ylim(0, 1)
@@ -114,7 +120,7 @@ def main():
     summary += "─" * 48 + "\n"
     summary += f"{'Model':<22} {'P':>6} {'R':>6} {'F1':>6} {'FN':>5}\n"
     summary += "─" * 48 + "\n"
-    for name, sname in zip(model_names, ["BCE", "Focal", "VS Loss (IEEE SPL)"]):
+    for name, sname in zip(model_names, ["BCE", "Focal", "ASL", "VS Loss (IEEE SPL)"]):
         best_ep = max(all_metrics[name], key=lambda e: e["f1"])
         summary += (f"{sname:<22} "
                     f"{best_ep['precision']:>6.3f} "
